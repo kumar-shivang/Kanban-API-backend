@@ -57,6 +57,24 @@ class List(db.Model):
         self.userID = userID
 
 
+# The card class represents a card in the database. It has following fields: cardID, name, listID, creationTime, lastEdited, isComplete.
+class Card(db.Model):
+    __tablename__ = 'card' # This name will be used to refer to the table in the database for relationships and joins.
+    cardID = db.Column(db.Integer, primary_key=True) # cardID is the primary key for the card table
+    cardName = db.Column(db.String(30)) # name is a string with a maximum of 30 characters.
+    listID = db.Column(db.Integer, db.ForeignKey('list.listID')) # listID is a foreign key that references the listID field in the List class
+    creationTime = db.Column(db.DateTime) # creationTime is a DateTime field
+    lastEdited = db.Column(db.DateTime) # lastEdited is a DateTime field
+    isComplete = db.Column(db.Boolean) # isComplete is a boolean field which is used to determine if the card is complete or not.
+
+    # The __repr__ method is used to print the object. It prints the cardID and name of the card.
+    def __repr__(self):
+        return '<cardID %r name %s >' % self.cardID % self.name
+
+    # The __init__ method is the class constructor
+    def __init__(self, name, listID, creationTime=datetime.now, lastEdited=None, isComplete=False):
+        self.name = name
+        self.listID = listID
 
 
 
