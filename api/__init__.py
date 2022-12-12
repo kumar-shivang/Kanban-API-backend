@@ -7,3 +7,5 @@ api = FlaskAPI() #Initialize the flask api
 @api.route('/cardID/<int:cardID>', methods=['GET']) #This route returns the card with the given cardID
 def getCard(cardID):
     return db.session.query(Card).filter(Card.cardID == cardID).first()
+
+    
