@@ -2,7 +2,17 @@
 <!--- This file is part of the project. -->
 # Kanban App
 
-A simple Kanban app built with Python Flask backend and VueJS frontend.
+Welcome to KanbanApp, a simple Kanban-style task management application built using the Flask web framework for backend API and VueJS framework. With KanbanApp, you can easily organize and manage your tasks in a flexible and intuitive way.
+
+## Features
+
+* Create, edit, and delete tasks
+* Create, edit, and delete task lists
+* Drag and drop tasks to move them between lists
+* Mark tasks as complete and incomplete
+* Filter tasks by list and completion status
+* Search for tasks by name
+* Responsive design
 
 ## Requirements
 
@@ -10,26 +20,26 @@ Requirements for the project are listed in the requirements.txt file.
 
 ## Installation
 
--1 Clone the repository
+*1 Clone the repository
 
 ```bash
 git clone https://github.com/kumar-shivang/Kanban
 
 ```
 
--2 Create a virtual environment
+*2 Create a virtual environment
 
 ```bash
 python3 -m venv venv
 ```
 
--3 Install the requirements
+*3 Install the requirements
   
   ```bash
   pip install -r requirements.txt
   ```
 
--4 Create the database
+*4 Create the database
   
   ```python
   from app import app, db
@@ -37,7 +47,7 @@ python3 -m venv venv
       db.create_all()
   ```
 
--4 Run the app
+*4 Run the app
   
   ```bash
   flask run
