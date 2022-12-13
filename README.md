@@ -24,12 +24,14 @@ Requirements for the project are listed in the requirements.txt file.
 
   ```bash
   git clone https://github.com/kumar-shivang/Kanban
-  cd Kanban``` 
+  cd Kanban
+  ```
 
 2. Create a virtual environment
 
   ```bash
-  python3 -m venv venv
+    python3 -m venv venv 
+    source venv/bin/activate
   ```
 
 3. Install the requirements
@@ -44,11 +46,17 @@ Requirements for the project are listed in the requirements.txt file.
   from app import app, db
   with app.app_context():
       db.create_all()
+  
   ```
 
 5. Run the app
   
   ```bash
+  FLASK_APP=app.py
+  FLASK_ENV=development
+  FLASK_DEBUG=1
+  FLASK_RUN_PORT=5000
+  FLASK_RUN_HOST= "localhost"
   flask run
   ```
 
