@@ -1,1 +1,5 @@
 /__pycache__
+/instance
+/venv
+/.idea
+compontent.vue
