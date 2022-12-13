@@ -4,6 +4,7 @@
 /.idea/
 /compontent.vue
 /.gitignore
-api/.gitignore
 database/__pycache__
+api/__pycache__
 component.vue
+database/.gitignore
