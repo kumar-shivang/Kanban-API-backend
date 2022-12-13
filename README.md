@@ -22,16 +22,15 @@ Requirements for the project are listed in the requirements.txt file.
 
 1. Clone the repository
 
-```bash
-git clone https://github.com/kumar-shivang/Kanban
-
-```
+  ```bash
+  git clone https://github.com/kumar-shivang/Kanban
+  cd Kanban``` 
 
 2. Create a virtual environment
 
-```bash
-python3 -m venv venv
-```
+  ```bash
+  python3 -m venv venv
+  ```
 
 3. Install the requirements
   
