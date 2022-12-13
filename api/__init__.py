@@ -16,3 +16,18 @@ def createCard(listID, title, deadline):
     db.session.add(c)
     db.session.commit()
     return jsonify({c.cardID : "Successfully created"}), 200
+
+#This route creates a list with the given title in the board with the given boardID
+@API.route('/create/list/<int:userID>/<title>', methods=['POST'])
+def createList(userID, title):
+    l = List(title, userID)
+    db.session.add(l)
+    db.session.commit()
+    return jsonify({l.listID : "Successfully created"}), 200
+
+@API.route('/create/user/<username>/<password>', methods=['POST']) #This route creates a user with the given username and password
+def createUser(username, password):
+    u = User(username, password)
+    db.session.add(u)
+    db.session.commit()
+    return jsonify({u.userID : "Successfully created"}), 200
