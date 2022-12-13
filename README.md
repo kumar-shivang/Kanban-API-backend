@@ -5,12 +5,8 @@
 A simple Kanban app built with Python Flask backend and VueJS frontend.
 
 ## Requirements
-<--!- This section lists the requirements for the project. -->
-- Python 3.11
-- VueJS 3.0.11
-- Flask 2.0.1
-- sqlite3 3.35.5
-- sqlalchemy 1.4.22
+
+Requirements for the project are listed in the requirements.txt file.
 
 ## Installation
 
