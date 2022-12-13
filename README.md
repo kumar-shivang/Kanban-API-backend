@@ -46,3 +46,7 @@ python3 -m venv venv
   ```bash
   flask run
   ```
+
+## Usage
+
+To use the Kanban App, simply run the app and go to the url <http://localhost:5000/> or <http://127.0.0.1/5000/>
