@@ -20,26 +20,26 @@ Requirements for the project are listed in the requirements.txt file.
 
 ## Installation
 
-* Clone the repository
+1. Clone the repository
 
 ```bash
 git clone https://github.com/kumar-shivang/Kanban
 
 ```
 
-1. Create a virtual environment
+2. Create a virtual environment
 
 ```bash
 python3 -m venv venv
 ```
 
-2. Install the requirements
+3. Install the requirements
   
   ```bash
   pip install -r requirements.txt
   ```
 
-3. Create the database
+4. Create the database
   
   ```python
   from app import app, db
@@ -47,7 +47,7 @@ python3 -m venv venv
       db.create_all()
   ```
 
-4. Run the app
+5. Run the app
   
   ```bash
   flask run
