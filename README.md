@@ -33,9 +33,16 @@ python3 -m venv venv
   pip install -r requirements.txt
   ```
 
+-4 Create the database
+  
+  ```python
+  from app import app, db
+  with app.app_context():
+      db.create_all()
+  ```
+
 -4 Run the app
   
   ```bash
-  python app.py
+  flask run
   ```
-  
