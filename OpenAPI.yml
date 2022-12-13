@@ -1,0 +1,174 @@
+# This is a sample OpenAPI 3.0.2 specification.
+# It is used to test the OpenAPI 3.0.2 parser.
+
+
+openapi: '3.0.2'
+info:
+  title: Kanban API
+  version: '1.0'
+servers:
+  - url: http://127.0.0.1:5000
+    description: Local server
+tags:
+  - name: User
+    description: Operations about user
+  - name: List
+    description: Operations about list
+  - name: Card
+    description: Operations about card
+paths:
+  /card/{int:cardID}:
+    get:
+      tags:
+        - Card
+
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Card'
+  /create/card/{int:listID}/{string:cardName}/{int:deadline}:
+    post:
+      tags:
+        - Card
+      parameters:
+        - name: cardName
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: deadline
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: listID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Card'
+  /create/list/{int:userID}/{string:title}:
+      post:
+        tags:
+          - List
+        parameters:
+          - name: userID
+            in: path
+            required: true
+            schema:
+              type: integer
+              format: int64
+          - name: title
+            in: path
+            required: true
+            schema:
+              type: string
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/List'
+  /create/user/{string:username}/{string:password}:
+      post:
+        tags:
+          - User
+        parameters:
+          - name: username
+            in: path
+            required: true
+            schema:
+              type: string
+          - name : password
+            in : path
+            required: true
+            schema:
+              type: string
+        responses:
+          '200':
+            description: OK
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/User'
+        
+
+
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        userID:
+          type: integer
+          format: int64
+        username:
+          type: string
+        email:
+          type: string
+          format: email
+        password_hash:
+          type: string
+          format: password
+        userLists:
+          type: array
+          items:
+            $ref: '#/components/schemas/List'
+        userCards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Card'
+    List:
+      type: object
+      properties:
+        listID:
+          type: integer
+          format: int64
+        title:
+          type: string
+        userID :
+          type: integer
+          format: int64
+        listCards:
+          type: array
+          items:
+            $ref: '#/components/schemas/Card'
+    Card:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        cardName:
+          type: string
+        content:
+          type: string
+        lastEdited:
+          type: string
+          format: date-time
+        completionDate:
+          type: string
+          format: date-time
+        isComplete:
+          type: boolean
+        deadline:
+          type: string
+          format: date-time
+        listID:
+          type: integer
+          format: int64
+        cardID:
+          type: integer
+          format: int64
