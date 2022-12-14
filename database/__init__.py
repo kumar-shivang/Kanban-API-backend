@@ -20,7 +20,7 @@ class User(db.Model):
 
     # The __repr__ method is used to print the object. It prints the username of the user
     def __repr__(self):
-        return '<userID %r username %s >' % self.userID % self.username
+        return '<User %r>' % self.username
 
         # The generate password hash method generates a password hash from a password using the werkzeug security module.
 
@@ -42,6 +42,23 @@ class User(db.Model):
         self.password_hash = generate_password_hash(password)
         self.email = email
 
+    
+    #This function changes the user object to json format
+    def to_json(self):
+        json = {
+            'userID': self.userID,
+            'username': self.username,
+            'email': self.email
+        }
+        lists = self.userLists
+        if lists:
+            json['lists'] = [l.to_json() for l in lists]
+        else:
+            json['lists'] = []
+        return json
+
+    
+
 
 # The List class represents a list in the database. It has 3 fields: listID, title and userID. The userID field is a foreign key that references the userID field in the User class.
 class List(db.Model):
@@ -57,8 +74,25 @@ class List(db.Model):
 
     # The __init__ method is the class constructor for the List class. It takes a name and userID as parameters, and sets the name and userID fields.
     def __init__(self, name, userID):
-        self.name = name
-        self.userID = userID
+        u = User.query.filter_by(userID=userID).first()
+        if u:
+            self.title = name
+            self.userID = userID
+
+    # to_json() function returns the list object in json format
+    def to_json(self):
+        json = {
+            'listID': self.listID,
+            'title': self.title,
+            'userID': self.userID,
+        }
+        cards = self.listCards
+        if cards:
+            json['cards'] = [c.to_json() for c in cards]
+        else:
+            json['cards'] = []
+        return json
+
 
 
 # The card class represents a card in the database. It has following fields: cardID, name, listID, creationTime, lastEdited, isComplete, deadline.
@@ -81,14 +115,32 @@ class Card(db.Model):
 
     # The __init__ method is the class constructor
     def __init__(self, name, listID,deadline,content=""):
-        self.cardName = name
-        self.listID = listID
-        self.creationTime = datetime.now
-        self.deadline = deadline
-        self.content = content
-        self.isComplete = False
+        l = List.query.filter_by(listID=listID).first()
+        if l:
+            self.cardName = name
+            self.listID = listID
+            self.creationTime = datetime.now()                               
+            self.deadline = deadline
+            self.content = content
+            self.isComplete = False
+            self.userID = l.userID
 
     # The markcomplete method marks a card as complete. It sets the isComplete field to True and sets the completionDate field to the current date and time.
     def markComplete(self):
         self.isComplete = True
         self.completionDate = datetime.now
+
+    # to_json() function returns the card object in json format
+    def to_json(self):
+        return {
+            'cardID': self.cardID,
+            'cardName': self.cardName,
+            'content': self.content,
+            'creationTime': self.creationTime,
+            'lastEdited': self.lastEdited,
+            'completionDate': self.completionDate,
+            'isComplete': self.isComplete,
+            'deadline': self.deadline,
+            'listID': self.listID,
+            'userID': self.userID
+        }
