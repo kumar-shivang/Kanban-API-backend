@@ -25,6 +25,11 @@ class User(db.Model):
         # The generate password hash method generates a password hash from a password using the werkzeug security module.
 
     def generate_password_hash(self, password):
+        """Generate password hash from password
+
+        Args:
+            password (string): The password to be hashed
+        """        
         self.password_hash = generate_password_hash(password)
 
     # The check password method checks if a password is correct by checking the hash. Again, this method is provided by the werkzeug security module.
@@ -45,6 +50,11 @@ class User(db.Model):
     
     #This function changes the user object to json format
     def to_json(self):
+        """Converts the user object to json format
+
+        Returns:
+            json: The user object in json format
+        """
         json = {
             'userID': self.userID,
             'username': self.username,
@@ -81,6 +91,10 @@ class List(db.Model):
 
     # to_json() function returns the list object in json format
     def to_json(self):
+        """Converts the list object to json format
+        Returns:
+            json: The list object in json format
+        """
         json = {
             'listID': self.listID,
             'title': self.title,
@@ -88,7 +102,7 @@ class List(db.Model):
         }
         cards = self.listCards
         if cards:
-            json['cards'] = [c.to_json() for c in cards]
+            json['cards'] = {c.to_json() for c in cards}
         else:
             json['cards'] = []
         return json
@@ -132,6 +146,10 @@ class Card(db.Model):
 
     # to_json() function returns the card object in json format
     def to_json(self):
+        """Converts the card object to json format
+        Returns:
+            json: The card object in json format
+        """
         return {
             'cardID': self.cardID,
             'cardName': self.cardName,
