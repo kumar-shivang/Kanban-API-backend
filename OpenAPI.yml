@@ -11,98 +11,622 @@ servers:
     description: Local server
 tags:
   - name: User
-    description: Operations about user
+    description: Operations on users
   - name: List
-    description: Operations about list
+    description: Operations on lists
   - name: Card
-    description: Operations about card
+    description: Operations on cards
 paths:
-  /card/{int:cardID}:
+  /user:
+    get:
+      tags:
+        - User
+      summary: Get user by userID
+      description: Returns a single user
+      operationId: getUserByID
+      # parameters:
+      #   - name: userID
+      #     in: path
+      #     description: ID of user to return
+      #     required: true
+      #     schema:
+      #       type: integer
+      #       format: int64
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userID:
+                  type: integer
+                  format: int64
+                  example: 0
+                password:
+                  type: string
+                  format: password
+                  example: "********"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid ID or Password supplied"
+        '404':
+          description: User not found
+    post:
+      tags:
+        - User
+      summary: Create user
+      description: Create a new user with a username and password
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                  example: user1
+                password:
+                  type: string
+                  format: password
+                  example: password@123
+      # parameters:
+      #   - name: username
+      #     in: path
+      #     description: Username of user to create
+      #     required: true
+      #     schema:
+      #       type: string
+      #   - name: password
+      #     in: path
+      #     description: Password of user to create
+      #     required: true
+      #     schema:
+      #       type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid username/password supplied
+    delete:
+      tags:
+        - User
+      summary: Delete user
+      description: Delete a user by userID
+      operationId: deleteUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userID:
+                  type: integer
+                  format: int64
+                  example: 0
+                password:
+                  type: string
+                  format: password
+                  example: "********"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User deleted"
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid ID or Password supplied"
+        '404':
+          description: User not found
+    put:
+      tags:
+        - User
+      summary: Update user
+      description: Update a user by userID
+      operationId: updateUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userID:
+                  type: integer
+                  format: int64
+                  example: 0
+                password:
+                  type: string
+                  format: password
+                  example: "********"
+                newUsername:
+                  type: string
+                  example: user1
+                newPassword:
+                  type: string
+                  format: password
+                  example: password@123
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid ID or Password supplied"
+        '404':
+          description: User not found
+  /list:
+    get:
+      tags:
+        - List
+      summary: Get list by listID
+      description: Returns a single list
+      operationId: getListByID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                listID:
+                  type: integer
+                  format: int64
+                  example: 0
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/List'
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid ID supplied"
+        '404':
+          description: List not found
+    post:
+      tags:
+        - List
+      summary: Create list
+      description: Create a new list with a title
+      operationId: createList
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "List 1"
+                userID:
+                  type: integer
+                  format: int64
+                  example: 0
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/List'
+        '400':
+          description: Invalid title supplied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid title supplied"
+    delete:
+      tags:
+        - List
+      summary: Delete list
+      description: Delete a list by listID
+      operationId: deleteList
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                listID:
+                  type: integer
+                  format: int64
+                  example: 0
+      responses:
+
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "List deleted"
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid ID supplied"
+        '404':
+          description: List not found
+    put:
+      tags:
+        - List
+      summary: Update list
+      description: Update a list by listID
+      operationId: updateList
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                listID:
+                  type: integer
+                  format: int64
+                  example: 0
+                title:
+                  type: string
+                  example: "List 1"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/List'
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid ID supplied"
+        '404':
+          description: List not found
+  /card:
     get:
       tags:
         - Card
-
+      summary: Get card by cardID
+      description: Returns a single card
+      operationId: getCardByID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cardID:
+                  type: integer
+                  format: int64
+                  example: 0
       responses:
         '200':
-          description: OK
+          description: Successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Card'
-  /create/card/{int:listID}/{string:cardName}/{int:deadline}:
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid ID supplied"
+        '404':
+          description: Card not found
     post:
       tags:
         - Card
-      parameters:
-        - name: cardName
-          in: path
-          required: true
-          schema:
-            type: string
-        - name: deadline
-          in: path
-          required: true
-          schema:
-            type: integer
-        - name: listID
-          in: path
-          required: true
-          schema:
-            type: integer
-            format: int64
+      summary: Create card
+      description: Create a new card with a title
+      operationId: createCard
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  example: "Card 1"
+                content:
+                  type: string
+                  example: "Card content"
+                listID:
+                  type: integer
+                  format: int64
+                  example: 0
+                deadline:
+                  type: string
+                  format: date
+                  example: "2020-12-31"
+                userID:
+                  type: integer
+                  format: int64
+                  example: 0
       responses:
         '200':
-          description: OK
+          description: Successful operation
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Card'
-  /create/list/{int:userID}/{string:title}:
-      post:
-        tags:
-          - List
-        parameters:
-          - name: userID
-            in: path
-            required: true
+        '400':
+          description: Invalid title supplied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid title supplied"
+    delete:
+      tags:
+        - Card
+      summary: Delete card
+      description: Delete a card by cardID
+      operationId: deleteCard
+      requestBody:
+        content:
+          application/json:
             schema:
-              type: integer
-              format: int64
-          - name: title
-            in: path
-            required: true
+              type: object
+              properties:
+                cardID:
+                  type: integer
+                  format: int64
+                  example: 0
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Card deleted"
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid ID supplied"
+        '404':
+          description: Card not found
+    put:
+      tags:
+        - Card
+      summary: Update card 
+      description: Update a card 
+      operationId: updateCard
+      requestBody:
+        content:
+          application/json:
             schema:
-              type: string
-        responses:
-          '200':
-            description: OK
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/List'
-  /create/user/{string:username}/{string:password}:
-      post:
-        tags:
-          - User
-        parameters:
-          - name: username
-            in: path
-            required: true
+              type: object
+              properties:
+                cardID:
+                  type: integer
+                  format: int64
+                  example: 0
+                new_title:
+                  type: string
+                  example: "New title"
+                new_content:
+                  type: string
+                  example: "New Card content"
+                new_deadline:
+                  type: string
+                  format: date
+                  example: "2020-12-31"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Card'
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid ID supplied"
+        '404':
+          description: Card not found
+  /card/move:
+    put:
+      tags:
+        - Card
+      summary: Move card
+      description: Move a card to a new list
+      operationId: moveCard
+      requestBody:
+        content:
+          application/json:
             schema:
-              type: string
-          - name : password
-            in : path
-            required: true
+              type: object
+              properties:
+                cardID:
+                  type: integer
+                  format: int64
+                  example: 0
+                listID:
+                  type: integer
+                  format: int64
+                  example: 0
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Card'
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid ID supplied"
+        '404':
+          description: Card not found
+  /card/markComplete:
+    put:
+      tags:
+        - Card
+      summary: Mark card as complete
+      description: Mark a card as complete
+      operationId: markCardComplete
+      requestBody:
+        content:
+          application/json:
             schema:
-              type: string
-        responses:
-          '200':
-            description: OK
-            content:
-              application/json:
-                schema:
-                  $ref: '#/components/schemas/User'
-        
+              type: object
+              properties:
+                cardID:
+                  type: integer
+                  format: int64
+                  example: 0
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Card'
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid ID supplied"
+        '404':
+          description: Card not found
+  /card/markIncomplete:
+    put:
+      tags:
+        - Card
+      summary: Mark card as incomplete
+      description: Mark a card as incomplete
+      operationId: markCardIncomplete
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cardID:
+                  type: integer
+                  format: int64
+                  example: 0
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Card'
+        '400':
+          description: Invalid ID supplied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid ID supplied"
+        '404':
+          description: Card not found
+  /card/assign:
+    
+
 
 
 
@@ -114,14 +638,18 @@ components:
         userID:
           type: integer
           format: int64
+          example: 0
         username:
           type: string
+          example: user1
         email:
           type: string
           format: email
+          example: user@kanban.com
         password_hash:
           type: string
           format: password
+          example: "********"
         userLists:
           type: array
           items:
@@ -136,11 +664,14 @@ components:
         listID:
           type: integer
           format: int64
+          example: 0
         title:
           type: string
+          example: "List 1"
         userID :
           type: integer
           format: int64
+          example: 0
         listCards:
           type: array
           items:
@@ -148,27 +679,36 @@ components:
     Card:
       type: object
       properties:
-        id:
-          type: integer
-          format: int64
-        cardName:
-          type: string
-        content:
-          type: string
-        lastEdited:
-          type: string
-          format: date-time
-        completionDate:
-          type: string
-          format: date-time
-        isComplete:
-          type: boolean
-        deadline:
-          type: string
-          format: date-time
-        listID:
-          type: integer
-          format: int64
         cardID:
           type: integer
           format: int64
+          example: 0
+        cardName:
+          type: string
+          example: "Card 1"
+        content:
+          type: string
+          example: "This is a card"
+        lastEdited:
+          type: string
+          format: date-time
+          example: "2020-01-01T00:00:00Z"
+        completionDate:
+          type: string
+          format: date-time
+          example: "2020-01-01T00:00:00Z"
+        isComplete:
+          type: boolean
+          example: false
+        deadline:
+          type: string
+          format: date-time
+          example: "2020-01-01T00:00:00Z"
+        listID:
+          type: integer
+          format: int64
+          example: 0
+        userID:
+          type: integer
+          format: int64
+          example: 0
