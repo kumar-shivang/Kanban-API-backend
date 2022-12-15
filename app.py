@@ -1,6 +1,5 @@
 # Description: This is the main file of the application. It is used to run the application.
 from flask import Flask  # Import the Flask class from the flask module
-# from flask_cors import CORS  # Import the CORS class from the flask_cors module
 from database import db  # Import the database object from the database folder
 from api import API  # Import the API object from the api folder
 from api.userAPI import *  # Import all the routes from the userAPI
