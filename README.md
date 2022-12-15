@@ -43,9 +43,9 @@ Requirements for the project are listed in the requirements.txt file.
 4. Create the database
   
   ```python
-  from app import app, db
-  with app.app_context():
-      db.create_all()
+from app import app, db
+with app.app_context():
+    db.create_all()
   
   ```
 
