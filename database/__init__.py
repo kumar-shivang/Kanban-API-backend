@@ -2,6 +2,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime  # Import the datetime object from the datetime module.
+from flask import jsonify  # Import the jsonify function from the flask module
 
 db = SQLAlchemy()
     
@@ -102,7 +103,7 @@ class List(db.Model):
         }
         cards = self.listCards
         if cards:
-            json['cards'] = {c.to_json() for c in cards}
+            json['cards'] = [c.to_json() for c in cards]
         else:
             json['cards'] = []
         return json
