@@ -1,6 +1,6 @@
 from flask import Blueprint
-
-# from database import db, User
-# from flask import request, jsonify
+from flask_jwt_extended import JWTManager
 API = Blueprint('API', __name__)
+jwt = JWTManager()
+
 
