@@ -9,7 +9,7 @@ def get_user():
     user_id = get_jwt_identity()
     user = User.query.get(user_id)
     if user is None:
-        return jsonify({'message': 'User not found'}), 404
+        return jsonify({'error': 'User not found'}), 404
     return user.to_json(), 200
 
 @API.route('/user', methods=['POST'])
@@ -21,7 +21,7 @@ def create_user():
         db.session.add(user)
         db.session.commit()
         return jsonify({'message': 'User created successfully'}), 201
-    return jsonify({'message': 'User already exists'}), 400
+    return jsonify({'error': 'User already exists'}), 400
 
 @API.route('/user', methods=['PUT'])
 @jwt_required(locations=['json'])
@@ -30,7 +30,7 @@ def update_user():
     user_id = get_jwt_identity()
     user = User.query.get(user_id)
     if user is None:
-        return jsonify({'message': 'User not found'}), 404
+        return jsonify({'error': 'User not found'}), 404
     user.username = req['username']
     user.email = req['email']
     db.session.commit()

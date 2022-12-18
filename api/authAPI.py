@@ -4,6 +4,7 @@ from flask import request, jsonify
 from database import User
 from flask_jwt_extended import create_access_token
 
+
 @API.route('/auth/login', methods=['POST'])
 def login():
     req = request.get_json()
@@ -14,6 +15,4 @@ def login():
         return jsonify({'error': 'Invalid password'}), 401
     access_token = create_access_token(identity=user.userID)
     return jsonify({'message': 'Login successful', 'access_token': access_token}), 200
-
-
 
