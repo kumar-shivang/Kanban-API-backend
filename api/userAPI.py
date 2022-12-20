@@ -1,16 +1,16 @@
 from . import API
 from flask import request, jsonify
 from database import db, User
-from flask_jwt_extended import jwt_required, get_jwt_identity
+from flask_jwt_extended import get_jwt_identity, jwt_required
 
 @API.route('/user', methods=['GET'])
-@jwt_required(locations=['json'])
+@jwt_required()
 def get_user():
     user_id = get_jwt_identity()
     user = User.query.get(user_id)
     if user is None:
         return jsonify({'error': 'User not found'}), 404
-    return user.to_json(), 200
+    return jsonify(user.to_json()),200
 
 @API.route('/user', methods=['POST'])
 def create_user():
@@ -24,7 +24,7 @@ def create_user():
     return jsonify({'error': 'User already exists'}), 400
 
 @API.route('/user', methods=['PUT'])
-@jwt_required(locations=['json'])
+@jwt_required()
 def update_user():
     req = request.get_json()
     user_id = get_jwt_identity()
@@ -37,7 +37,7 @@ def update_user():
     return jsonify({'message': 'User updated successfully'}), 200
 
 @API.route('/user', methods=['DELETE'])
-@jwt_required(locations=['json'])
+@jwt_required()
 def delete_user():
     user_id = get_jwt_identity()
     req = User.query.get(user_id)
@@ -49,3 +49,5 @@ def delete_user():
     db.session.delete(user)
     db.session.commit()
     return jsonify({'message': 'User deleted successfully'}), 200
+
+

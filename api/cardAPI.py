@@ -7,7 +7,7 @@ from datetime import datetime
 
 
 @API.route('/card', methods=['GET'])
-@jwt_required(locations=['json'])
+@jwt_required()
 def get_card():
     req = request.get_json()
     user_id = get_jwt_identity()
@@ -20,7 +20,7 @@ def get_card():
 
 
 @API.route('/card', methods=['POST'])
-@jwt_required(locations=['json'])
+@jwt_required()
 def create_card():
     req = request.get_json()
     user_id = get_jwt_identity()
@@ -38,7 +38,7 @@ def create_card():
 
 
 @API.route('/card', methods=['PUT'])
-@jwt_required(locations=['json'])
+@jwt_required()
 def update_card():
     req = request.get_json()
     user_id = get_jwt_identity()
@@ -56,7 +56,7 @@ def update_card():
     return jsonify({'message': 'Card updated successfully'}), 200
 
 @API.route('/card', methods=['DELETE'])
-@jwt_required(locations=['json'])
+@jwt_required()
 def delete_card():
     req = request.get_json()
     user_id = get_jwt_identity()
@@ -70,7 +70,7 @@ def delete_card():
     return jsonify({'message': 'Card deleted successfully'}), 200
 
 @API.route('/card/move', methods=['PUT'])
-@jwt_required(locations=['json'])
+@jwt_required()
 def move_card():
     req = request.get_json()
     user_id = get_jwt_identity()
@@ -89,7 +89,7 @@ def move_card():
     return jsonify({'message': 'Card moved successfully'}), 200
 
 @API.route('/card/markComplete', methods=['POST'])
-@jwt_required(locations=['json'])
+@jwt_required()
 def mark_card_complete():
     req = request.get_json()
     user_id = get_jwt_identity()
@@ -104,7 +104,7 @@ def mark_card_complete():
     return jsonify({'message': 'Card marked complete successfully'}), 200
 
 @API.route('/card/markIncomplete', methods=['POST'])
-@jwt_required(locations=['json'])
+@jwt_required()
 def mark_card_incomplete():
     req = request.get_json()
     user_id = get_jwt_identity()
