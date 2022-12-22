@@ -21,9 +21,9 @@ paths:
     post:
       tags:
         - User
-      summary: Login user and get token
-      description: Login a user and get a token
-      operationId: loginUser 
+      summary: Login user
+      description: Login a user with a username and password to get a access token
+      operationId: login
       requestBody:
         content:
           application/json:
@@ -50,7 +50,18 @@ paths:
                     example: "Login successful"
                   access_token:
                     type: string
-                    example: "eyJhbGciOidflajfgldajfafldjfla"
+                    example: "eyJhbGciOiafldjflajf"
+
+        '401':
+          description: Invalid username/password supplied
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Invalid password"
         '404':
           description: User not found
           content:
@@ -61,23 +72,13 @@ paths:
                   error:
                     type: string
                     example: "User not found"
-        '401':
-          description: Invalid Password
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  error:
-                    type: string
-                    example: "Invalid password"
   /user:
     get:
       tags:
         - User
-      summary: Get user from token
+      summary: Get user by access token
       description: Returns a single user
-      operationId: getUserByToken
+      operationId: get_user
       requestBody:
         content:
           application/json:
@@ -86,7 +87,7 @@ paths:
               properties:
                 access_token:
                   type: string
-                  example: "eyJhbGciOdfjaldfjlajfd"
+                  example: "eyJhbGciOdajfgfdlajf"
       responses:
         '200':
           description: Successful operation
@@ -96,6 +97,14 @@ paths:
                 $ref: '#/components/schemas/User'
         '404':
           description: User not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "User not found"
     post:
       tags:
         - User
@@ -116,7 +125,7 @@ paths:
                   format: password
                   example: password@123
       responses:
-        '200':
+        '201':
           description: Successful operation
           content:
             application/json:
@@ -127,7 +136,7 @@ paths:
                     type: string
                     example: "User created successfully"
         '400':
-          description: Invalid username supplied
+          description: User already exists
           content:
             application/json:
               schema:
@@ -140,8 +149,8 @@ paths:
       tags:
         - User
       summary: Delete user
-      description: Delete a user by token and password
-      operationId: deleteUser
+      description: Delete a user by access_token and password
+      operationId: delete_user
       requestBody:
         content:
           application/json:
@@ -150,7 +159,7 @@ paths:
               properties:
                 access_token:
                   type: string
-                  example: "eyJhbGciOdljfgldajfladj"
+                  example: "eyJhbGciOdajfldkjfl"
                 password:
                   type: string
                   format: password
@@ -167,7 +176,7 @@ paths:
                     type: string
                     example: "User deleted successfully"
         '401':
-          description: Invalid password
+          description: "Invalid Password"
           content:
             application/json:
               schema:
@@ -175,7 +184,7 @@ paths:
                 properties:
                   error:
                     type: string
-                    example: "Invalid password"
+                    example: "Invalid Password"
         '404':
           description: User not found
           content:
@@ -190,8 +199,8 @@ paths:
       tags:
         - User
       summary: Update user
-      description: Update a user by access_token, username and email 
-      operationId: updateUser
+      description: Update a user by access_token
+      operationId: update_user
       requestBody:
         content:
           application/json:
@@ -200,23 +209,28 @@ paths:
               properties:
                 access_token:
                   type: string
-                  example: "eyJhbGciOidflajfgldajfafldjfla"
-                username:
+                  example: "eyJhbGciOd"
+                newUsername:
                   type: string
                   example: user1
-                email:
+                newEmail:
                   type: string
-                  example: "user1@kanban.com"
-                
+                  example: user1@kanban.com
+
+
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '400':
-          description: Invalid ID supplied
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User updated successfully"
+        '404':
+          description: User not found
           content:
             application/json:
               schema:
@@ -224,29 +238,28 @@ paths:
                 properties:
                   error:
                     type: string
-                    example: "Invalid ID or Password supplied"
-        '404':
-          description: User not found
+                    example: "User not found"
+  
   /list:
     get:
       tags:
         - List
-      summary: Get list by access_token and listID
+      summary: Get list by listID and access_token
       description: Returns a single list
-      operationId: getListByListID
+      operationId: get_list
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
-                access_token:
-                  type: string
-                  example: "fjdlajfgldajflasjfldasjfl;dj"
                 listID:
                   type: integer
                   format: int64
                   example: 0
+                access_token:
+                  type: string
+                  example: "eyJhbGciOdajfldkjfl"
       responses:
         '200':
           description: Successful operation
@@ -255,7 +268,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/List'
         '401':
-          description: Unauthorized
+          description: Invalid access_token
           content:
             application/json:
               schema:
@@ -291,21 +304,21 @@ paths:
                   example: "List 1"
                 access_token:
                   type: string
-                  example: "fjdlajfgldajflasjfldasjfl;dj"
-
+                  example: "eyJhbGciOdajfgfdlajf"
       responses:
         '200':
-          description: List created successfully
+          description: Successful operation
           content:
             application/json:
               schema:
-                type: object
+                type:
+                  object
                 properties:
                   message:
                     type: string
                     example: "List created successfully"
         '400':
-          description: Invalid title supplied
+          description: List with same title already exists
           content:
             application/json:
               schema:
@@ -314,6 +327,7 @@ paths:
                   error:
                     type: string
                     example: "List already exists"
+
     delete:
       tags:
         - List
@@ -326,14 +340,15 @@ paths:
             schema:
               type: object
               properties:
-                access_token:
-                  type: string
-                  example: "fjdlajfgldajflasjfldasjfl;dj"
                 listID:
                   type: integer
                   format: int64
                   example: 0
+                access_token:
+                  type: string
+                  example: "eyJhbGciOdajfgfdlajf"
       responses:
+
         '200':
           description: Successful operation
           content:
@@ -354,7 +369,6 @@ paths:
                   error:
                     type: string
                     example: "Unauthorized"
-                  
         '404':
           description: List not found
           content:
@@ -365,7 +379,6 @@ paths:
                   error:
                     type: string
                     example: "List not found"
-
     put:
       tags:
         - List
@@ -382,12 +395,12 @@ paths:
                   type: integer
                   format: int64
                   example: 0
-                title:
+                new_title:
                   type: string
                   example: "List 1"
                 access_token:
                   type: string
-                  example: "dhgadljfldakfjldajfdl"
+                  example: "eyJhbGciOdajfgfdlajf"
       responses:
         '200':
           description: Successful operation
@@ -396,9 +409,19 @@ paths:
               schema:
                 type: object
                 properties:
+                  message:
+                    type: string
+                    example: "List updated successfully"
+        '400':
+          description: List with same title already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
                   error:
                     type: string
-                    example : "List updated successfully"
+                    example: "List with same title already exists"
         '401':
           description: Unauthorized
           content:
@@ -410,15 +433,15 @@ paths:
                     type: string
                     example: "Unauthorized"
         '404':
-            description: List not found
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    error:
-                      type: string
-                      example: "List not found"
+          description: List not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "List not found"
         
   /card:
     get:
@@ -426,7 +449,7 @@ paths:
         - Card
       summary: Get card by cardID and access_token
       description: Returns a single card
-      operationId: getCardByID
+      operationId: get_card
       requestBody:
         content:
           application/json:
@@ -438,8 +461,9 @@ paths:
                   format: int64
                   example: 0
                 access_token:
-                    type: string
-                    example: "fjdlajfgldajflasjfldasjfl;dj"
+                  type: string
+                  example: "eyJhbGciOdajfgfdlajf"
+                
       responses:
         '200':
           description: Successful operation
@@ -458,20 +482,20 @@ paths:
                     type: string
                     example: "Unauthorized"
         '404':
-            description: Card not found
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    error:
-                      type: string
-                      example: "Card not found"
+          description: Card not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Card not found"
     post:
       tags:
         - Card
       summary: Create card
-      description: Create a new card with a title, listID,content, deadline and access_token
+      description: Create a new card with a title
       operationId: createCard
       requestBody:
         content:
@@ -479,6 +503,9 @@ paths:
             schema:
               type: object
               properties:
+                access_token:
+                  type: string
+                  example: "eyJhbGciOdajfgfdlajf"
                 title:
                   type: string
                   example: "Card 1"
@@ -493,16 +520,21 @@ paths:
                   type: string
                   format: date
                   example: "2020-12-31"
-                access_token:
-                  type: string
-                  example: "fjdlajfgldajflasjfldasjfl;dj"
+                userID:
+                  type: integer
+                  format: int64
+                  example: 0
       responses:
         '200':
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Card'
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Card created successfully"
         '401':
           description: Unauthorized
           content:
@@ -514,35 +546,34 @@ paths:
                     type: string
                     example: "Unauthorized"
         '404':
-            description: List not found
-            content:
-              application/json:
-                schema:
-                  type: object
-                  properties:
-                    error:
-                      type: string
-                      example: "List not found"
-
+          description: List not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "List not found"
     delete:
       tags:
         - Card
       summary: Delete card
       description: Delete a card by cardID and access_token
-      operationId: deleteCard
+      operationId: delete_card
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
+                access_token:
+                  type: string
+                  example: "eyJhbGciOdajfgfdlajf"
                 cardID:
                   type: integer
                   format: int64
                   example: 0
-                access_token:
-                    type: string
-                    example: "fjdlajfgldajflasjfldasjfl;dj"
       responses:
         '200':
           description: Successful operation
@@ -553,7 +584,7 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "Card deleted successfully"
+                    example: "Card deleted"
         '401':
           description: Unauthorized
           content:
@@ -578,14 +609,17 @@ paths:
       tags:
         - Card
       summary: Update card 
-      description: Update a card 
-      operationId: updateCard
+      description: Update a card by cardID and access_token 
+      operationId: update_card
       requestBody:
         content:
           application/json:
             schema:
               type: object
               properties:
+                access_token:
+                  type: string
+                  example: "eyJhbGciOdajfgfdlajf"
                 cardID:
                   type: integer
                   format: int64
@@ -631,13 +665,12 @@ paths:
                   error:
                     type: string
                     example: "Card not found"
-
   /card/move:
     put:
       tags:
         - Card
       summary: Move card
-      description: Move a card to a new list using cardID, listID and access_token
+      description: Move a card to a new list by cardID and access_token
       operationId: moveCard
       requestBody:
         content:
@@ -645,17 +678,17 @@ paths:
             schema:
               type: object
               properties:
+                access_token:
+                  type: string
+                  example: "eyJhbGciOdajfgfdlajf"
                 cardID:
                   type: integer
                   format: int64
                   example: 0
-                listID:
+                new_listID:
                   type: integer
                   format: int64
                   example: 0
-                access_token:
-                    type: string
-                    example: "fjdlajfgldajflasjfldasjfl;dj"
       responses:
         '200':
           description: Successful operation
@@ -668,31 +701,41 @@ paths:
                     type: string
                     example: "Card moved successfully"
         '401':
-            description: Unauthorized
-            content:
-                application/json:
-                  schema:
-                    type: object
-                    properties:
-                      error:
-                        type: string
-                        example: "Unauthorized"
-        '404':
-          description: Card/List not found
+          description: Unauthorized
           content:
-                application/json:
-                  schema:
-                    type: object
-                    properties:
-                      error:
-                        type: string
-                        example: "Card/List not found"
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Unauthorized"
+        '404':
+          description: Card not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Card not found"
+        '409':
+          description: List not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "List not found"
   /card/markComplete:
     put:
       tags:
         - Card
-      summary: Mark card as complete using cardID and access_token
-      description: Mark a card as complete
+      summary: Mark card as complete
+      description: Mark a card as complete by cardID and access_token
       operationId: markCardComplete
       requestBody:
         content:
@@ -700,57 +743,9 @@ paths:
             schema:
               type: object
               properties:
-                cardID:
-                  type: integer
-                  format: int64
-                  example: 0
                 access_token:
-                    type: string
-                    example: "fjdlajfgldajflasjfldasjfl;dj"
-      responses:
-        '200':
-          description: Successful operation
-          content:
-            application/json:
-                schema:
-                    type: object
-                    properties:
-                      message:
-                        type: string
-                        example: "Card marked complete successfully"
-        '401':
-            description: Unauthorized
-            content:
-                application/json:
-                  schema:
-                    type: object
-                    properties:
-                      error:
-                        type: string
-                        example: "Unauthorized"
-        '404':
-            description: Card not found
-            content:
-                    application/json:
-                      schema:
-                        type: object
-                        properties:
-                          error:
-                            type: string
-                            example: "Card not found"
-  /card/markIncomplete:
-    put:
-      tags:
-        - Card
-      summary: Mark card as incomplete
-      description: Mark a card as incomplete
-      operationId: markCardIncomplete
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
+                  type: string
+                  example: "eyJhbGciOdajfgfdlajf"
                 cardID:
                   type: integer
                   format: int64
@@ -765,27 +760,82 @@ paths:
                 properties:
                   message:
                     type: string
-                    example: "Card marked incomplete successfully"
+                    example: "Card marked as complete"
         '401':
-            description: Unauthorized
-            content:
-                application/json:
-                  schema:
-                    type: object
-                    properties:
-                      error:
-                        type: string
-                        example: "Unauthorized"
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Unauthorized"
         '404':
-            description: Card not found
-            content:
-                    application/json:
-                      schema:
-                        type: object
-                        properties:
-                          error:
-                            type: string
-                            example: "Card not found"
+          description: Card not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Card not found"
+  /card/markIncomplete:
+    put:
+      tags:
+        - Card
+      summary: Mark card as incomplete
+      description: Mark a card as incomplete by cardID and access_token
+      operationId: markCardIncomplete
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                access_token:
+                  type: string
+                  example: "eyJhbGciOdajfgfdlajf"
+                cardID:
+                  type: integer
+                  format: int64
+                  example: 0
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Card marked as incomplete"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Unauthorized"
+        '404':
+          description: Card not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Card not found"
+    
+
+
+
 
 components:
   schemas:
