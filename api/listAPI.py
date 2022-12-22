@@ -48,7 +48,7 @@ def update_list():
     lists = List.query.filter_by(userID=user_id).all()
     list_names = [list.title for list in lists]
     if req['new_title'] not in list_names:
-        l.title = req['title']
+        l.title = req['new_title']
         db.session.commit()
         return jsonify({'message': 'List updated successfully'}), 200
     else:

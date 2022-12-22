@@ -43,7 +43,7 @@ def update_card():
     req = request.get_json()
     user_id = get_jwt_identity()
     card = Card.query.get(req['cardID'])
-    date_string = req['deadline']
+    date_string = req['new_deadline']
     deadline = datetime.strptime(date_string, '%Y-%m-%d').date()
     if card is None:
         return jsonify({'error': 'Card not found'}), 404
@@ -75,16 +75,16 @@ def move_card():
     req = request.get_json()
     user_id = get_jwt_identity()
     card = Card.query.get(req['cardID'])
-    l = List.query.get(req['listID'])
+    l = List.query.get(req['new_listID'])
     if card is None:
         return jsonify({'error': 'Card not found'}), 404
     if card.userID != user_id:
         return jsonify({'error': 'Unauthorized'}), 401
     if l is None:
-        return jsonify({'error': 'List not found'}), 404
+        return jsonify({'error': 'List not found'}), 409
     if l.userID != user_id:
         return jsonify({'error': 'Unauthorized'}), 401
-    card.listID = req['listID']
+    card.listID = req['new_listID']
     db.session.commit()
     return jsonify({'message': 'Card moved successfully'}), 200
 
@@ -101,7 +101,7 @@ def mark_card_complete():
     card.isComplete = True
     card.completionDate = datetime.now()
     db.session.commit()
-    return jsonify({'message': 'Card marked complete successfully'}), 200
+    return jsonify({'message': 'Card marked as complete successfully'}), 200
 
 @API.route('/card/markIncomplete', methods=['POST'])
 @jwt_required()

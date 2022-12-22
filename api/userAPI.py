@@ -31,8 +31,8 @@ def update_user():
     user = User.query.get(user_id)
     if user is None:
         return jsonify({'error': 'User not found'}), 404
-    user.username = req['username']
-    user.email = req['email']
+    user.username = req['newUsername']
+    user.email = req['newEmail']
     db.session.commit()
     return jsonify({'message': 'User updated successfully'}), 200
 

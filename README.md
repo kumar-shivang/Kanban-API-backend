@@ -40,24 +40,11 @@ source venv/bin/activate
 pip install -r requirements.txt
   ```
 
-4. Create the database
-  
-  ```python
-from app import app, db
-with app.app_context():
-    db.create_all()
-  
-  ```
 
-5. Run the app
+4. Run the app
   
   ```bash
-FLASK_APP=app.py
-FLASK_ENV=development
-FLASK_DEBUG=1
-FLASK_RUN_PORT=5000
-FLASK_RUN_HOST= "localhost"
-flask run
+run.sh
   ```
 
 ## Usage
