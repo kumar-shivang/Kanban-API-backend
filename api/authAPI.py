@@ -24,6 +24,3 @@ def logout():
     response = jsonify({'message': 'Logout successful'})
     unset_access_cookies(response)
     return response, 200
-
-
-
