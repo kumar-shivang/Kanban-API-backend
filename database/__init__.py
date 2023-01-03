@@ -2,6 +2,7 @@
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime  # Import the datetime object from the datetime module.
+from time import mktime as epoch  # Import the epoch function from the time module.
 
 
 db = SQLAlchemy()
@@ -123,7 +124,7 @@ class Card(db.Model):
     completionDate = db.Column(db.DateTime,
                                nullable=True)  # completionDate is a DateTime field that records the date and time of completion of a task if the task is complete.
     isComplete = db.Column(
-        db.Boolean)  # isComplete is a boolean field which is used to determine if the card is complete or not.
+        db.Boolean, default=False)  # isComplete is a boolean field which is used to determine if the card is complete or not.
     deadline = db.Column(db.DateTime)  # deadline is a DateTime field that records the deadline of a task.
     listID = db.Column(db.Integer, db.ForeignKey(
         'list.listID'))  # listID is a foreign key that references the listID field in the List class
@@ -161,11 +162,11 @@ class Card(db.Model):
             'cardID': self.cardID,
             'cardName': self.cardName,
             'content': self.content,
-            'creationTime': self.creationTime,
+            'creationTime': epoch(self.creationTime)*1000,
             'lastEdited': self.lastEdited,
-            'completionDate': self.completionDate,
+            'completionDate': epoch(self.completionDate.timetuple())*1000,
             'isComplete': self.isComplete,
-            'deadline': self.deadline,
+            'deadline': epoch(self.deadline.timetuple())*1000,
             'listID': self.listID,
             'userID': self.userID
         }
