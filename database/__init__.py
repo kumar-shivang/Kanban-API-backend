@@ -163,7 +163,7 @@ class Card(db.Model):
             'cardName': self.cardName,
             'content': self.content,
             'creationTime': epoch(self.creationTime)*1000,
-            'lastEdited': self.lastEdited,
+            'lastEdited': epoch(self.lastEdited.timetuple()),
             'completionDate': epoch(self.completionDate.timetuple())*1000,
             'isComplete': self.isComplete,
             'deadline': epoch(self.deadline.timetuple())*1000,
