@@ -88,7 +88,7 @@ def move_card():
     db.session.commit()
     return jsonify({'message': 'Card moved successfully'}), 200
 
-@API.route('/card/markComplete', methods=['POST'])
+@API.route('/card/markComplete', methods=['PATCH'])
 @jwt_required()
 def mark_card_complete():
     req = request.get_json()
@@ -103,7 +103,7 @@ def mark_card_complete():
     db.session.commit()
     return jsonify({'message': 'Card marked as complete successfully'}), 200
 
-@API.route('/card/markIncomplete', methods=['POST'])
+@API.route('/card/markIncomplete', methods=['PATCH'])
 @jwt_required()
 def mark_card_incomplete():
     req = request.get_json()
