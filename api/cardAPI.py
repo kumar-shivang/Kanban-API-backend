@@ -43,8 +43,8 @@ def update_card():
     req = request.get_json()
     user_id = get_jwt_identity()
     card = Card.query.get(req['cardID'])
-    date_string = req['new_deadline']
-    deadline = datetime.strptime(date_string, '%Y-%m-%d').date()
+    timestamp = req['new_deadline']
+    deadline = datetime.fromtimestamp(timestamp)
     if card is None:
         return jsonify({'error': 'Card not found'}), 404
     if card.userID != user_id:
@@ -98,10 +98,12 @@ def mark_card_complete():
         return jsonify({'error': 'Card not found'}), 404
     if card.userID != user_id:
         return jsonify({'error': 'Unauthorized'}), 401
+    if card.isComplete:
+        return jsonify({'error': 'Card already marked as complete'}), 409
     card.isComplete = True
     card.completionDate = datetime.now()
     db.session.commit()
-    return jsonify({'message': 'Card marked as complete successfully'}), 200
+    return jsonify({'message': 'Card marked as complete successfully', 'card':card.to_json()}), 200
 
 @API.route('/card/markIncomplete', methods=['PATCH'])
 @jwt_required()
@@ -116,5 +118,5 @@ def mark_card_incomplete():
     card.isComplete = False
     card.completionDate = None
     db.session.commit()
-    return jsonify({'message': 'Card marked incomplete successfully'}), 200
+    return jsonify({'message': 'Card marked incomplete successfully', "card":card.to_json()}), 200
     

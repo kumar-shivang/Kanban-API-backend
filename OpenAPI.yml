@@ -442,7 +442,64 @@ paths:
                   error:
                     type: string
                     example: "List not found"
-        
+      
+  /list/movecards:
+    patch:
+      tags:
+        - List
+      summary: Move cards between lists
+      description: Move all cards between lists by listID and access_token
+      operationId: moveCards
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                listID:
+                  type: integer
+                  format: int64
+                  example: 0
+                access_token:
+                  type: string
+                  example: "eyJhbGciOdajfgfdlajf"
+                new_listID:
+                  type: integer
+                  format: int64
+                  example: 0
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Cards moved successfully"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Unauthorized"
+        '404':
+          description: List not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "List not found"
+                
+
   /card:
     get:
       tags:
@@ -631,9 +688,9 @@ paths:
                   type: string
                   example: "New Card content"
                 new_deadline:
-                  type: string
-                  format: date
-                  example: "2020-12-31"
+                  type: integer
+                  format: timestamp
+                  example: 000000000000
       responses:
         '200':
           description: Successful operation
@@ -897,20 +954,20 @@ components:
           type: string
           example: "This is a card"
         lastEdited:
-          type: string
-          format: date-time
-          example: "2020-01-01T00:00:00Z"
+          type: integer
+          example: 0000000000
         completionDate:
-          type: string
-          format: date-time
-          example: "2020-01-01T00:00:00Z"
+          type: integer
+          example: 0000000000
         isComplete:
           type: boolean
           example: false
         deadline:
-          type: string
-          format: date-time
-          example: "2020-01-01T00:00:00Z"
+          type: integer
+          example: 0000000000
+        creationTime:
+          type: integer
+          example: 0000000000
         listID:
           type: integer
           format: int64
