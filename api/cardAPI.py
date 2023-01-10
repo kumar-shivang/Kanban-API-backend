@@ -23,9 +23,10 @@ def get_card():
 @jwt_required()
 def create_card():
     req = request.get_json()
+    print(req)
     user_id = get_jwt_identity()
-    date_string = req['deadline']
-    deadline = datetime.strptime(date_string, '%Y-%m-%d').date()
+    epoch_seconds = req['deadline']
+    deadline = datetime.fromtimestamp(epoch_seconds)
     l = List.query.get(req['listID'])
     if l is None:
         return jsonify({'error': 'List not found'}), 404
@@ -34,7 +35,7 @@ def create_card():
     card = Card(req['title'], listID=req['listID'], deadline=deadline, content=req['content'])
     db.session.add(card)
     db.session.commit()
-    return jsonify({'message': 'Card created successfully'}), 201
+    return jsonify({'message': 'Card created successfully', 'card':card.to_json()}), 201
 
 
 @API.route('/card', methods=['PUT'])
@@ -53,7 +54,7 @@ def update_card():
     card.deadline = deadline
     card.content = req['new_content']
     db.session.commit()
-    return jsonify({'message': 'Card updated successfully'}), 200
+    return jsonify({'message': 'Card updated successfully','card':card.to_json()}), 200
 
 @API.route('/card', methods=['DELETE'])
 @jwt_required()
@@ -69,7 +70,7 @@ def delete_card():
     db.session.commit()
     return jsonify({'message': 'Card deleted successfully'}), 200
 
-@API.route('/card/move', methods=['PUT'])
+@API.route('/card/move', methods=['PATCH'])
 @jwt_required()
 def move_card():
     req = request.get_json()
@@ -85,8 +86,9 @@ def move_card():
     if l.userID != user_id:
         return jsonify({'error': 'Unauthorized'}), 401
     card.listID = req['new_listID']
+    card.lastEdited = datetime.now()
     db.session.commit()
-    return jsonify({'message': 'Card moved successfully'}), 200
+    return jsonify({'message': 'Card moved successfully', 'card':card.to_json()}), 200
 
 @API.route('/card/markComplete', methods=['PATCH'])
 @jwt_required()
