@@ -2,9 +2,11 @@ from . import API
 from flask import request, jsonify
 from database import db, User
 from flask_jwt_extended import get_jwt_identity, jwt_required
+from cache import cache
 
 @API.route('/user', methods=['GET'])
 @jwt_required()
+# @cache.cached(timeout=300) can be used to cache the response
 def get_user():
     user_id = get_jwt_identity()
     user = User.query.get(user_id)
@@ -31,7 +33,10 @@ def update_user():
     user = User.query.get(user_id)
     if user is None:
         return jsonify({'error': 'User not found'}), 404
-    user.username = req['newUsername']
+    if "newUsername" in req.keys():
+        user.username = req["newUsername"]
+    if "newEmail" in req.keys():
+        user.email = req["newEmail"]
     user.email = req['newEmail']
     db.session.commit()
     return jsonify({'message': 'User updated successfully'}), 200
