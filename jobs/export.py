@@ -13,7 +13,7 @@ def export_list_as_csv(listID):
                                                        card.lastEdited))
     file.close()
     return "done"
-l
+
 
 @celery.task
 def export_card_as_csv(cardID):
