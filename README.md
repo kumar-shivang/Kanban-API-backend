@@ -1,18 +1,53 @@
-<!--- This file creates a README.md file for the project. -->
-<!--- This file is part of the project. -->
-# Kanban App
+# Kanban API
 
-Welcome to KanbanApp, a simple Kanban-style task management application built using the Flask web framework for backend API and VueJS framework. With KanbanApp, you can easily organize and manage your tasks in a flexible and intuitive way.
+Welcome to KanbanAPI - a simple Kanban board API built with Flask and SQLAlchemy. This API is used by the Kanban App which can be found [here](https://www.github.com/kumar-shivang/Kanban). The Kanban App is a simple Kanban board built with Vue 3 and Vite.
 
 ## Features
 
 * Create, edit, and delete tasks
 * Create, edit, and delete task lists
-* Drag and drop tasks to move them between lists
 * Mark tasks as complete and incomplete
-* Filter tasks by list and completion status
-* Search for tasks by name
-* Responsive design
+* export tasks as a CSV file
+* daily task reminders
+* monthly user summary
+* user authentication
+* caching
+
+## Project Structure
+
+```sh
+.
+├── api
+│   ├── authAPI.py
+│   ├── cardAPI.py
+│   ├── exportAPI.py
+│   ├── __init__.py
+│   ├── listAPI.py
+│   └── userAPI.py
+├── app.py
+├── cache
+│   └── __init__.py
+├── config
+│   └── __init__.py
+├── database
+│   └── __init__.py
+├── file_structure.txt
+├── jobs
+│   ├── export.py
+│   └── __init__.py
+├── mail
+│   ├── daily_reminder.py
+│   ├── __init__.py
+│   └── monthly_summary.py
+├── OpenAPI.yml
+├── README.md
+├── requirements.txt
+├── run.sh
+└── worker
+    └── task.py
+
+8 directories, 21 files
+```
 
 ## Requirements
 
@@ -20,33 +55,32 @@ Requirements for the project are listed in the requirements.txt file.
 
 ## Installation
 
-1. Clone the repository
+* Clone the repository
 
-  ```bash
-git clone https://github.com/kumar-shivang/Kanban
-cd Kanban
+    ```bash
+  git clone https://github.com/kumar-shivang/Kanban-API-backend.git
+  cd Kanban-API-backend
   ```
 
-2. Create a virtual environment
+* Create a virtual environment
 
   ```bash
-python3 -m venv venv 
-source venv/bin/activate
-  ```
+  python3 -m venv venv 
+  source venv/bin/activate
+    ```
 
-3. Install the requirements
+* Install the requirements
   
   ```bash
-pip install -r requirements.txt
+  pip install -r requirements.txt
   ```
 
-
-4. Run the app
+* Run the app
   
   ```bash
-run.sh
+  run.sh
   ```
 
 ## Usage
 
-To use the Kanban App, simply run the app and go to the url <http://localhost:5000/> or <http://127.0.0.1/5000/>
+To use the Kanban App, simply run the app and go to the frontend. The frontend can be found [here](https://www.github.com/kumar-shivang/Kanban).
