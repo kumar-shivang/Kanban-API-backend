@@ -47,10 +47,10 @@ class User(db.Model):
         raise AttributeError('password is not a readable attribute')
 
     # The __init__ method is the class constructor for the User class. It takes a username and password as parameters, and sets the username and password fields.
-    def __init__(self, username, password, email=None):
+    def __init__(self, username, password):
         self.username = username
         self.password_hash = generate_password_hash(password)
-        self.email = email
+        self.email = username + "@kanban.com"
 
     # This function changes the user object to json format
     def to_json(self):
@@ -133,7 +133,7 @@ class Card(db.Model):
 
     # The __repr__ method is used to print the object. It prints the cardID and name of the card.
     def __repr__(self):
-        return '<cardID %r name %s >' % self.cardID % self.name
+        return '<cardID %r>' % self.cardID
 
     # The __init__ method is the class constructor
     def __init__(self, name, listID, deadline, content=""):
@@ -158,15 +158,21 @@ class Card(db.Model):
         Returns:
             json: The card object in json format
         """
+        last_edit = None
+        completion_date = None
+        if self.lastEdited:
+                last_edit: int(epoch(self.lastEdited.timetuple()))
+        if self.isComplete:
+            completion_date = int(epoch(self.completionDate.timetuple())*1000)
         return {
             'cardID': self.cardID,
             'cardName': self.cardName,
             'content': self.content,
-            'creationTime': epoch(self.creationTime.timetuple())*1000,
-            'lastEdited': epoch(self.lastEdited.timetuple()),
-            'completionDate': epoch(self.completionDate.timetuple())*1000,
+            'creationTime': int(epoch(self.creationTime.timetuple())*1000),
+            'lastEdited': last_edit,
+            'completionDate': completion_date,
             'isComplete': self.isComplete,
-            'deadline': epoch(self.deadline.timetuple())*1000,
+            'deadline': int(epoch(self.deadline.timetuple())*1000),
             'listID': self.listID,
             'userID': self.userID
         }
