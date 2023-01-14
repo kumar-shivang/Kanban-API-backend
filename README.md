@@ -62,24 +62,23 @@ Requirements for the project are listed in the requirements.txt file.
   cd Kanban-API-backend
   ```
 
-* Create a virtual environment
-
-  ```bash
-  python3 -m venv venv 
-  source venv/bin/activate
+* Build and run the app
+  
+    ```bash
+      sh run.sh
     ```
 
-* Install the requirements
-  
-  ```bash
-  pip install -r requirements.txt
-  ```
+* Run the redis server
 
-* Run the app
-  
-  ```bash
-  run.sh
-  ```
+    ```bash
+    sh redis-server.sh
+    ```
+
+* Run the celery worker and beat
+
+    ```bash
+    sh run_worker.sh
+    ```
 
 ## Usage
 
