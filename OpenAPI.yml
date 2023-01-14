@@ -889,7 +889,176 @@ paths:
                   error:
                     type: string
                     example: "Card not found"
-    
+
+
+  /export/card/<int:cardID>:
+    get:
+      tags:
+        - Export
+      summary: Export card
+      description: Export a card by cardID
+      operationId: exportCard
+      parameters:
+        - name: cardID
+          in: path
+          description: ID of card to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 0
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Exporting card as CSV"
+                  taskID:
+                    type: string
+                    example: "0agfd-agaedf-gadfa"
+        '404':
+          description: Card not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "card not found"
+  /export/list/<int:listID>:
+    get:
+      tags:
+        - Export
+      summary: Export list
+      description: Export a list by listID
+      operationId: exportList
+      parameters:
+        - name: listID
+          in: path
+          description: ID of list to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 0
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Exporting list as CSV"
+                  taskID:
+                    type: string
+                    example: "0agfd-agaedf-gadfa"
+        '404':
+          description: List not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "list not found"
+  /export/status:
+    post:
+      tags:
+        - Export
+      summary: Get export status
+      description: Get the status of an export task by taskID
+      operationId: getExportStatus
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                taskID:
+                  type: string
+                  example: "0agfd-agaedf-gadfa"
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  taskID:
+                    type: string
+                    example: "0agfd-agaedf-gadfa"
+                  status:
+                    type: string
+                    example: "PENDING"
+  /export/download/card/<int:cardID>:
+    get:
+      tags:
+        - Export
+      summary: Download card
+      description: Download a card by cardID
+      operationId: downloadCard
+      parameters:
+        - name: cardID
+          in: path
+          description: ID of card to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 0
+      responses:
+        '200':
+          description: Successful operation
+        '404':
+          description: Card not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "card not found"
+  /export/download/list/<int:listID>:
+    get:
+      tags:
+        - Export
+      summary: Download list
+      description: Download a list by listID
+      operationId: downloadList
+      parameters:
+        - name: listID
+          in: path
+          description: ID of list to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 0
+      responses:
+        '200':
+          description: Successful operation
+        '404':
+          description: List not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "list not found"    
 
 
 
