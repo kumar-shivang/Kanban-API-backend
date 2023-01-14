@@ -1,4 +1,5 @@
-from flask import jsonify, send_file, request
+from os import remove
+from flask import jsonify, send_file, request, after_this_request
 from database import List, Card
 from jobs.export import export_list_as_csv, export_card_as_csv
 from . import API
@@ -37,6 +38,14 @@ def download_card_as_csv(cardID):
     card = Card.query.filter_by(cardID=cardID).first()
     if card is None:
         return jsonify({'message': 'Card not found'}), 404
+
+    @after_this_request
+    def remove_file(response):
+        try:
+            remove("static/export-card-{}.csv".format(cardID))
+        except Exception as error:
+            print(error)
+        return response
     return send_file("static/export-card-{}.csv".format(cardID), as_attachment=True)
 
 
@@ -45,4 +54,11 @@ def download_list_as_csv(listID):
     export_list = List.query.get(listID)
     if export_list is None:
         return jsonify({'message': 'List not found'}), 404
+    @after_this_request
+    def remove_file(response):
+        try:
+            remove("static/export-list-{}.csv".format(listID))
+        except Exception as error:
+            print(error)
+        return response
     return send_file("static/export-list-{}.csv".format(listID), as_attachment=True)
