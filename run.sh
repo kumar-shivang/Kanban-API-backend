@@ -1,7 +1,1 @@
-python -c "
-from app import app
-from database import db
-with app.app_context():
-    db.create_all()
-"
-python app.py
+python -m venv ./venv && source ./venv/bin/activate && pip install -r requirements.txt && source ./venv/bin/activate && python app.py

@@ -1,0 +1,1 @@
+source ./venv/bin/activate && celery -A app.celery worker -l info -B
